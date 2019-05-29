@@ -7,6 +7,7 @@ void main() => runApp(MyApp());
 //1- Ticker =>
 //2- Animation
 //3- AnimationController
+//4- tween -> between(baslangıc - bitis) ,, curve
 
 class MyApp extends StatelessWidget {
   @override
@@ -34,24 +35,38 @@ class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
   int _counter = 0;
   AnimationController controller;
+  Animation animation;
+  Animation animation2;
+  Animation animation3;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     controller = AnimationController(
-        vsync: this,
-        duration: Duration(seconds: 1),
-        lowerBound: 10,
-        upperBound: 40);
+      vsync: this,
+      duration: Duration(seconds: 3),
+    );
 
     controller.addListener(() {
       setState(() {
-        debugPrint(controller.value.toString());
+        //debugPrint(controller.value.toString());
+        //debugPrint(animation.value.toString());
       });
     });
 
-    controller.forward(from: 20);
+    animation =
+        ColorTween(begin: Colors.red, end: Colors.yellow).animate(controller);
+
+    animation3 =
+        CurvedAnimation(parent: controller, curve: Curves.easeInOutExpo);
+
+    animation2 = AlignmentTween(begin: Alignment(-1, 1), end: Alignment(1, -1))
+        .animate(
+            CurvedAnimation(parent: controller, curve: Curves.easeInOutExpo));
+
+    //controller.reverse(from: 100);
+    controller.forward();
     controller.addStatusListener((durum) {
       if (durum == AnimationStatus.completed) {
         controller.reverse().orCancel;
@@ -79,6 +94,7 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: animation.value,
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -88,10 +104,15 @@ class _MyHomePageState extends State<MyHomePage>
           children: <Widget>[
             Text(
               'You have pushed the button this many times:',
+              style: TextStyle(fontSize: animation3.value * 20),
             ),
-            Text(
-              '$_counter', //+ '    %${controller.value.round()}',
-              style: TextStyle(fontSize: controller.value + 20),
+            Container(
+              alignment: animation2.value,
+              height: 100,
+              child: Text(
+                '$_counter', //+ '    %${controller.value.round()}',
+                style: TextStyle(fontSize: controller.value + 20),
+              ),
             ),
             Hero(
               tag: 'emre',
