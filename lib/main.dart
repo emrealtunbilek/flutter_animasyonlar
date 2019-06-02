@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'animasyon_widgetlar.dart';
 import 'new_page.dart';
 
 void main() => runApp(MyApp());
@@ -122,10 +123,17 @@ class _MyHomePageState extends State<MyHomePage>
               ),
             ),
             RaisedButton(
-              child: Text("Next Page"),
+              child: Text("Sıralı Animasyonlar"),
               onPressed: () {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => NewPage()));
+              },
+            ),
+            RaisedButton(
+              child: Text("Animasyonla ilgili Widgetlar"),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => AnimasyonluWidgetlar()));
               },
             )
           ],
